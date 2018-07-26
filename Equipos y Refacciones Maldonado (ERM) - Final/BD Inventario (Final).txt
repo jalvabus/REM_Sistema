@@ -1,0 +1,100 @@
+CREATE DATABASE Inventario_ERM;
+USE Inventario_ERM;
+
+CREATE TABLE Usuario(
+	Id_Usuario INT PRIMARY KEY AUTO_INCREMENT,
+	Nombre VARCHAR(20),
+	Usuario VARCHAR(15),
+	Contrasenia VARCHAR(10),
+	Telefono VARCHAR(10),
+	Estado VARCHAR(20),	
+	Tipo VARCHAR(20)	
+)ENGINE = InnoDB;
+
+CREATE TABLE Cliente(
+	Id_Cliente INT PRIMARY KEY AUTO_INCREMENT,
+	Razon_Social VARCHAR(80),
+	No_Estacion VARCHAR(10),
+	Contacto VARCHAR(20),
+	Telefono VARCHAR(10),
+	Correo VARCHAR(50),
+	Direccion VARCHAR(100)
+)ENGINE = InnoDB;
+
+CREATE TABLE Proveedor(
+	Id_Proveedor INT PRIMARY KEY AUTO_INCREMENT,
+	Razon_Social VARCHAR(80),
+	Contacto VARCHAR(20),
+	Telefono VARCHAR(10),
+	Correo VARCHAR(50),
+	Direccion VARCHAR(100)
+)ENGINE = InnoDB;
+
+CREATE TABLE Almacen(
+	Cod_Almacen INT PRIMARY KEY AUTO_INCREMENT,
+	Nombre_Almacen VARCHAR(30),
+	Descripcion VARCHAR(60)
+)ENGINE = InnoDB;
+
+CREATE TABLE Producto(
+	Cod_Producto VARCHAR(15) PRIMARY KEY,	
+	Proveedor VARCHAR(80),
+	Nombre_Producto VARCHAR(40),
+	Descripcion VARCHAR(100),
+	Precio_Venta BIGINT(15),	
+	Precio_Compra BIGINT(15),	
+	Existencia INT(5),
+	Cod_AlmacenFK VARCHAR(30)
+)ENGINE = InnoDB;
+
+CREATE TABLE Stock_Almacen(
+	Cod_Producto VARCHAR(15) PRIMARY KEY,
+	Nombre_Producto VARCHAR(40),
+	Descripcion VARCHAR(100),
+	Precio_Venta BIGINT(15),	
+	Precio_Compra BIGINT(15),	
+	Existencia INT(5)
+)ENGINE = InnoDB;
+
+CREATE TABLE Historial_Stock(
+	Cod_Historial INT PRIMARY KEY AUTO_INCREMENT,
+	Cod_ProductoFK VARCHAR(15),
+	Id_UsuarioFK INT,
+	Descripcion VARCHAR(80),
+	Referencia VARCHAR(80),
+	Cantidad_Nva INT(5),
+	Fecha DATE,
+	FOREIGN KEY(Cod_ProductoFK) REFERENCES Producto(Cod_Producto) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY(Id_UsuarioFK) REFERENCES Usuario(Id_Usuario) ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE = InnoDB;
+
+CREATE TABLE Venta(
+	Id_Venta INT PRIMARY KEY AUTO_INCREMENT,
+	Id_UsuarioFK INT,
+	Id_ClienteFK INT,
+	Fecha_Venta DATE,
+	Tipo_Comprobante VARCHAR(15),
+	Factura VARCHAR(10),
+	Tipo_Pago VARCHAR(30),	
+	Tipo_Cambio BIGINT(8),
+	Total_Venta BIGINT(10),
+	FOREIGN KEY(Id_UsuarioFK) REFERENCES Usuario(Id_Usuario) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY(Id_ClienteFK) REFERENCES Cliente(Id_Cliente) ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE = InnoDB;
+
+CREATE TABLE Detalle_Venta(
+	Cod_Detalle INT PRIMARY KEY AUTO_INCREMENT,
+	Cantidad_Detalle BIGINT(10),
+	Cod_ProductoFK VARCHAR(15),
+	Precio_Venta BIGINT(15),
+	Id_VentaFK INT,
+	Factura VARCHAR(10),
+	Tipo_Pago VARCHAR(30),	
+	Tipo_Cambio BIGINT(8),
+	Subtotal BIGINT(10),	
+	FOREIGN KEY(Cod_ProductoFK) REFERENCES Producto(Cod_Producto) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY(Id_VentaFK) REFERENCES Venta(Id_Venta) ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE = InnoDB;
+
+INSERT INTO Usuario VALUES(null,'Fernando','Fer','123','5535852596','Activo','Administrador');
+INSERT INTO Usuario VALUES(null,'Abril','Abril','123','5510951195','Activo','Vendedor');

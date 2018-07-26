@@ -1,0 +1,17 @@
+  try {
+           int codigo = Integer.parseInt(txtCod_venta.getText());
+            
+            JasperReport jr = (JasperReport) JRLoader.loadObject(FrmVentaDetalle.class.getResource("/Reportes/report1.jasper"));
+            Map parametro = new HashMap<String, Integer>();
+            parametro.put("cod_venta", codigo);
+ 
+            JasperPrint jp = JasperFillManager.fillReport(jr, parametro, cn);
+            JasperViewer jv = new JasperViewer(jp);
+            jv.show();
+           
+           // JasperPrintManager.printReport( jp, true);
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(rootPane, "error" + e);
+        }
